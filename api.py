@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
 from models import ScoredPost
@@ -20,7 +20,7 @@ def fetch_posts_and_boosts(
     filters = mastodon_client.filters()
 
     # Set our start query
-    start = datetime.now(timezone.utc) - timedelta(hours=hours)
+    start = datetime.utcnow() - timedelta(hours=hours)
 
     posts = []
     boosts = []
@@ -28,7 +28,7 @@ def fetch_posts_and_boosts(
     total_posts_seen = 0
 
     # Iterate over our home timeline until we run out of posts or we hit the limit
-    response = mastodon_client.timeline(min_id=start)
+    response = mastodon_client.timeline_public(min_id=start)
     while response and total_posts_seen < TIMELINE_LIMIT:
 
         # Apply our server-side filters
